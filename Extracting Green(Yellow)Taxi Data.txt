@@ -1,0 +1,21 @@
+SELECT  
+pickup_datetime, dropoff_datetime,
+timestamp_diff(dropoff_datetime, pickup_datetime, SECOND)as trip_duration,
+trip_distance,
+round( pickup_longitude, 3 ) as pickup_long,
+round( pickup_latitude, 3 )as pickup_lat,
+round( dropoff_longitude, 3 )as dropoff_long,
+round( dropoff_latitude, 3 )as dropoff_lat,
+passenger_count, fare_amount, tolls_amount, total_amount
+FROM `bigquery-public-data.new_york.tlc_green_trips_2014` 
+where
+trip_distance > 0
+and dropoff_datetime > pickup_datetime
+and pickup_datetime between '2014-04-01' and '2014-09-30'
+and dropoff_datetime between '2014-04-01' and '2014-09-30'
+and passenger_count is not null
+AND NOT ((pickup_longitude = dropoff_longitude) AND (dropoff_latitude = dropoff_latitude))
+AND pickup_longitude BETWEEN -74.2563 AND -73.6543
+AND pickup_latitude BETWEEN 40.4941 AND 40.9313
+AND dropoff_longitude BETWEEN -74.2563 AND -73.6543
+AND dropoff_latitude BETWEEN 40.4941 AND 40.9313
